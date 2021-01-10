@@ -485,14 +485,8 @@ end
 
 
 -- charge refinements
-strat = SurfaceMarking(dom)
-strat:add_surface("mem_in", "in")
-strat:add_surface("psd_in", "in")
-strat:add_surface("mem_out", "out")
-strat:add_surface("psd_out", "out")
-
 for i = 1, numChargeRefs do
-	strat:mark_without_error(refiner, approxSpace)
+	MarkAlongSurface(refiner, dom, {"mem_in", "psd_in", "mem_out", "psd_out"}, {"in", "in", "out", "out"})
 	refiner:refine()
 
 	-- rebalance
@@ -504,7 +498,7 @@ end
 
 -- global refinements	
 for i = 1, numGlobRefs do
-	mark_global(refiner, dom)
+	MarkGlobal(refiner, dom)
 	refiner:refine()
 	
 	-- rebalance

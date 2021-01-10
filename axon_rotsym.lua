@@ -142,7 +142,7 @@ approxSpace:init_levels()
 refiner = HangingNodeDomainRefiner(dom)
 AddShadowCopyAdjuster(refiner)
 for i = 1, numAnisoRefs do
-	mark_anisotropic_x(refiner, dom, 0.707)
+	MarkAnisotropicX(refiner, dom, 0.707)
 	unmark_ranvier_areas(refiner, approxSpace, ranvier, i <= 3)
 	refiner:refine()
 	refiner:clear_marks()
@@ -155,7 +155,7 @@ end
 
 -- isotropic refinements
 for i = 1, numRefs do
-	mark_global(refiner, dom)
+	MarkGlobal(refiner, dom)
 	refiner:refine()
 	balancer.qualityRecordName = " globRef " .. i
 	balancer.Rebalance(dom, loadBalancer)

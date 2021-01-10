@@ -172,7 +172,7 @@ end
 rmaOut = ExtensionRefMarkAdjuster(dom, {1,0,0}, "out")
 add_extension_ref_mark_adjuster(refiner, rmaOut)
 for i = 1, numAnisoRefs do
-	mark_global(refiner, dom)
+	MarkGlobal(refiner, dom)
 	refiner:refine()
 	balancer.Rebalance(dom, loadBalancer)
 end

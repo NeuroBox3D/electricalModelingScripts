@@ -209,7 +209,7 @@ approxSpace:init_top_surface()
 refiner = HangingNodeDomainRefiner(dom)
 AddShadowCopyAdjuster(refiner)
 for i = 1, numAnisoRefs do
-	mark_anisotropic_x(refiner, dom, 0.76)
+	MarkAnisotropicX(refiner, dom, 0.76)
 	unmark_ranvier_areas(refiner, approxSpace, ranvier, i <= 3)
 	refiner:refine()
 	balancer.qualityRecordName = "anisoRef " .. i
@@ -221,16 +221,17 @@ end
 
 
 -- membrane refinements
-strat = SurfaceMarking(dom)
-strat:add_surface("myelin_in", "in")
-strat:add_surface("myelin_out", "out")
+surfaceSubsets = {"myelin_in", "myelin_out"}
+volumeSubsets = {"in", "out"}
 for i = 1, nRanvier do
-	strat:add_surface("ranvier"..i.."_in", "in")
-	strat:add_surface("ranvier"..i.."_out", "out")
+	table.insert(surfaceSubsets, "ranvier"..i.."_in")
+	table.insert(surfaceSubsets, "ranvier"..i.."_out")
+	table.insert(volumeSubsets, "in")
+	table.insert(volumeSubsets, "out")
 end
 
 for i = 1, numMemRefs do
-	strat:mark_without_error(refiner, approxSpace)
+	MarkAlongSurface(refiner, dom, surfaceSubsets, volumeSubsets)
 	refiner:refine()
 	balancer.qualityRecordName = "  memRef " .. i
 	balancer.Rebalance(dom, loadBalancer)
@@ -242,7 +243,7 @@ end
 
 -- isotropic refinements
 for i = 1, numRefs do
-	mark_global(refiner, dom)
+	MarkGlobal(refiner, dom)
 	refiner:refine()
 	balancer.qualityRecordName = " globRef " .. i
 	balancer.Rebalance(dom, loadBalancer)
